@@ -1,0 +1,41 @@
+Could not open module param file '/sys/module/bifrost_kbase/parameters/large_page_conf'
+arm_release_ver: g29p1-12eac0, rk_so_ver: 5
+=======================================================
+    glmark2 2023.01
+=======================================================
+    OpenGL Information
+    GL_VENDOR:      ARM
+    GL_RENDERER:    Mali-G31
+    GL_VERSION:     OpenGL ES 3.2 v1.g29p1-12eac0.d033ab2a431b2d440b7c941a0e8e1ffa
+    Surface Config: buf=32 r=8 g=8 b=8 a=8 depth=24 stencil=0 samples=0
+    Surface Size:   720x720 windowed
+=======================================================
+[build] duration=5.0:use-vbo=false: FPS: 523 FrameTime: 1.913 ms
+[build] duration=5.0:use-vbo=true: FPS: 602 FrameTime: 1.662 ms
+[texture] duration=5.0:texture-filter=nearest: FPS: 725 FrameTime: 1.380 ms
+[texture] duration=5.0:texture-filter=linear: FPS: 719 FrameTime: 1.392 ms
+[texture] duration=5.0:texture-filter=mipmap: FPS: 749 FrameTime: 1.336 ms
+[shading] duration=5.0:shading=gouraud: FPS: 441 FrameTime: 2.271 ms
+[shading] duration=5.0:shading=blinn-phong-inf: FPS: 375 FrameTime: 2.673 ms
+[shading] duration=5.0:shading=phong: FPS: 294 FrameTime: 3.402 ms
+[bump] bump-render=high-poly:duration=5.0: FPS: 183 FrameTime: 5.473 ms
+[bump] bump-render=normals:duration=5.0: FPS: 632 FrameTime: 1.584 ms
+[effect2d] duration=5.0:kernel=0,1,0;1,-4,1;0,1,0;: FPS: 425 FrameTime: 2.356 ms
+[effect2d] duration=5.0:kernel=1,1,1,1,1;1,1,1,1,1;1,1,1,1,1;: FPS: 150 FrameTime: 6.690 ms
+[pulsar] duration=5.0:light=false:quads=5:texture=false: FPS: 854 FrameTime: 1.172 ms
+[desktop] blur-radius=5:duration=5.0:effect=blur:passes=1:separable=true:windows=4: FPS: 123 FrameTime: 8.185 ms
+[desktop] duration=5.0:effect=shadow:windows=4: FPS: 380 FrameTime: 2.633 ms
+[buffer] columns=200:duration=5.0:interleave=false:update-dispersion=0.9:update-fraction=0.5:update-method=map: FPS: 101 FrameTime: 9.979 ms
+[buffer] columns=200:duration=5.0:interleave=false:update-dispersion=0.9:update-fraction=0.5:update-method=subdata: FPS: 101 FrameTime: 9.974 ms
+[buffer] columns=200:duration=5.0:interleave=true:update-dispersion=0.9:update-fraction=0.5:update-method=map: FPS: 131 FrameTime: 7.638 ms
+[ideas] duration=5.0:speed=duration: FPS: 185 FrameTime: 5.406 ms
+[jellyfish] duration=5.0: FPS: 245 FrameTime: 4.093 ms
+[terrain] duration=5.0: FPS: 18 FrameTime: 57.351 ms
+[shadow] duration=5.0: FPS: 192 FrameTime: 5.213 ms
+[refract] duration=5.0: FPS: 40 FrameTime: 25.526 ms
+[conditionals] duration=5.0:fragment-steps=0:vertex-steps=0: FPS: 688 FrameTime: 1.454 ms
+[function] duration=5.0:fragment-complexity=low:fragment-steps=5: FPS: 447 FrameTime: 2.240 ms
+[loop] duration=5.0:fragment-steps=5:fragment-uniform=false:vertex-steps=5: FPS: 439 FrameTime: 2.283 ms
+=======================================================
+                                  glmark2 Score: 374 
+=======================================================

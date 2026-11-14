@@ -1,0 +1,5 @@
+The patches in this folder modify Arm's mali_kbase kernel driver and are licensed like it:
+SPDX-License-Identifier: GPL-2.0
+
+They apply on top of ROCKNIX's mali_kbase tree (github.com/rocknix/mali_kbase, r54p2) after the
+RK3326 device's mali-bifrost patches, with `patch -p1` from the tree's top directory.

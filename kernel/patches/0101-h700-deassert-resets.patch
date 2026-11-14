@@ -1,0 +1,19 @@
+H700: deassert the GPU resets when kbase acquires them
+
+--- a/product/kernel/drivers/gpu/arm/midgard/platform/devicetree/mali_kbase_runtime_pm.c
++++ b/product/kernel/drivers/gpu/arm/midgard/platform/devicetree/mali_kbase_runtime_pm.c
+@@ -65,6 +65,14 @@
+ 			return;
+ 		}
+ 	}
++
++	/*
++	 * Allwinner H616/H700: the GPU reset line can be asserted here (panfrost's remove asserts it),
++	 * and the first register read (GPU_ID) comes before any soft reset, so release it here.
++	 */
++	for (i = 0; i < nr_resets; i++)
++		reset_control_deassert(resets[i]);
++	udelay(10);
+ }
+ 
+ static int pm_callback_soft_reset(struct kbase_device *kbdev)

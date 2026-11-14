@@ -1,0 +1,71 @@
+H700: runtime PM like panfrost's GPU_PM_RT (reset asserted while suspended)
+
+--- a/product/kernel/drivers/gpu/arm/midgard/platform/devicetree/mali_kbase_runtime_pm.c
++++ b/product/kernel/drivers/gpu/arm/midgard/platform/devicetree/mali_kbase_runtime_pm.c
+@@ -32,6 +32,14 @@
+ 
+ static struct reset_control **resets;
+ static int nr_resets;
++/*
++ * Allwinner H616/H700 (panfrost's GPU_PM_RT): on runtime suspend gate the clocks and then
++ * assert the GPU reset; on resume release the reset before the clocks. The regulator stays
++ * on. Without the reset around power-domain off/on, the first register access after a
++ * runtime resume hangs the bus.
++ */
++static bool pm_rt_reset;
++static bool regulators_on;
+ 
+ static void resets_init(struct kbase_device *kbdev)
+ {
+@@ -39,6 +47,10 @@
+ 	int i;
+ 
+ 	np = kbdev->dev->of_node;
++
++	pm_rt_reset = of_device_is_compatible(np, "allwinner,sun50i-h616-mali");
++	if (pm_rt_reset)
++		dev_info(kbdev->dev, "H616-style runtime PM: reset asserted while suspended\n");
+ 
+ 	nr_resets = of_count_phandle_with_args(np, "resets", "#reset-cells");
+ 	if (nr_resets <= 0) {
+@@ -112,11 +124,20 @@
+ 	unsigned int i;
+ 
+ #if defined(CONFIG_REGULATOR)
+-	for (i = 0; i < kbdev->nr_regulators; i++) {
+-		if (kbdev->regulators[i])
+-			regulator_enable(kbdev->regulators[i]);
+-	}
+-#endif
++	if (!pm_rt_reset || !regulators_on) {
++		for (i = 0; i < kbdev->nr_regulators; i++) {
++			if (kbdev->regulators[i])
++				regulator_enable(kbdev->regulators[i]);
++		}
++		regulators_on = true;
++	}
++#endif
++
++	if (pm_rt_reset && resets) {
++		for (i = 0; i < (unsigned int)nr_resets; i++)
++			reset_control_deassert(resets[i]);
++		udelay(10);
++	}
+ 
+ 	for (i = 0; i < kbdev->nr_clocks; i++) {
+ 		if (kbdev->clocks[i])
+@@ -131,6 +152,14 @@
+ 	for (i = 0; i < kbdev->nr_clocks; i++) {
+ 		if (kbdev->clocks[i])
+ 			clk_disable_unprepare(kbdev->clocks[i]);
++	}
++
++	if (pm_rt_reset) {
++		if (resets) {
++			for (i = 0; i < (unsigned int)nr_resets; i++)
++				reset_control_assert(resets[i]);
++		}
++		return; /* the regulator stays on, as with panfrost */
+ 	}
+ 
+ #if defined(CONFIG_REGULATOR)
